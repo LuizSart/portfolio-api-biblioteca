@@ -33,10 +33,10 @@ public class LivroController {
 
     // --- NOVAS ROTAS DE EMPRÉSTIMO ---
 
-    // Rota: POST http://localhost:8080/livros/1/emprestar
+    // Rota atualizada: POST http://localhost:8080/livros/1/emprestar?usuarioId=1
     @PostMapping("/{id}/emprestar")
-    public Livro emprestarLivro(@PathVariable Long id) {
-        return service.emprestarLivro(id);
+    public Livro emprestarLivro(@PathVariable Long id, @RequestParam Long usuarioId) {
+        return service.emprestarLivro(id, usuarioId);
     }
 
     // Rota: POST http://localhost:8080/livros/1/devolver

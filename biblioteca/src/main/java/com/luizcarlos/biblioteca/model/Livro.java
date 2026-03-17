@@ -4,8 +4,12 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
 public class Livro {
 
     @Id
@@ -14,6 +18,10 @@ public class Livro {
 
     @NotBlank(message = "O título não pode estar em branco")
     private String titulo;
+
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuarioQuemPegou; // Este campo guardará quem está com o livro
 
     private boolean disponivel = true;
 
@@ -37,19 +45,4 @@ public class Livro {
         this.anoPublicacao = anoPublicacao;
     }
 
-    // --- Getters e Setters Atualizados ---
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public String getTitulo() { return titulo; }
-    public void setTitulo(String titulo) { this.titulo = titulo; }
-
-    public Autor getAutor() { return autor; }
-    public void setAutor(Autor autor) { this.autor = autor; }
-
-    public Integer getAnoPublicacao() { return anoPublicacao; }
-    public void setAnoPublicacao(Integer anoPublicacao) { this.anoPublicacao = anoPublicacao; }
-
-    public boolean isDisponivel() { return disponivel; }
-    public void setDisponivel(boolean disponivel) { this.disponivel = disponivel; }
 }
