@@ -2,7 +2,8 @@ package com.luizcarlos.biblioteca.controller;
 
 import com.luizcarlos.biblioteca.model.Livro;
 import com.luizcarlos.biblioteca.repository.LivroRepository;
-import jakarta.validation.Valid; // <-- Importante: O IntelliJ deve importar isso automaticamente
+import com.luizcarlos.biblioteca.service.BibliotecaService; // Importando o novo service
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,38 +13,37 @@ import java.util.List;
 public class LivroController {
 
     private final LivroRepository repository;
+    private final BibliotecaService service; // Adicionando o service aqui
 
-    public LivroController(LivroRepository repository) {
+    // Atualizando o construtor para receber o service também
+    public LivroController(LivroRepository repository, BibliotecaService service) {
         this.repository = repository;
+        this.service = service;
     }
 
-    // CREATE: O @Valid avisa o Spring para checar as regras antes de salvar
     @PostMapping
     public Livro adicionarLivro(@Valid @RequestBody Livro livro) {
         return repository.save(livro);
     }
 
-    // READ
     @GetMapping
     public List<Livro> listarLivros() {
         return repository.findAll();
     }
 
-    // UPDATE: O @Valid também checa as regras na hora de atualizar
-    @PutMapping("/{id}")
-    public Livro atualizarLivro(@PathVariable Long id, @Valid @RequestBody Livro livroAtualizado) {
-        Livro livroExistente = repository.findById(id).orElseThrow();
+    // --- NOVAS ROTAS DE EMPRÉSTIMO ---
 
-        livroExistente.setTitulo(livroAtualizado.getTitulo());
-        livroExistente.setAutor(livroAtualizado.getAutor());
-        livroExistente.setAnoPublicacao(livroAtualizado.getAnoPublicacao());
-
-        return repository.save(livroExistente);
+    // Rota: POST http://localhost:8080/livros/1/emprestar
+    @PostMapping("/{id}/emprestar")
+    public Livro emprestarLivro(@PathVariable Long id) {
+        return service.emprestarLivro(id);
     }
 
-    // DELETE
-    @DeleteMapping("/{id}")
-    public void deletarLivro(@PathVariable Long id) {
-        repository.deleteById(id);
+    // Rota: POST http://localhost:8080/livros/1/devolver
+    @PostMapping("/{id}/devolver")
+    public Livro devolverLivro(@PathVariable Long id) {
+        return service.devolverLivro(id);
     }
+
+    // --- Outros métodos (PUT, DELETE) podem continuar abaixo ---
 }

@@ -15,6 +15,8 @@ public class Livro {
     @NotBlank(message = "O título não pode estar em branco")
     private String titulo;
 
+    private boolean disponivel = true;
+
     // --- A MÁGICA DOS RELACIONAMENTOS ACONTECE AQUI ---
     @NotNull(message = "O autor é obrigatório")
     @ManyToOne // Diz à base de dados: "Muitos livros para Um Autor"
@@ -47,4 +49,7 @@ public class Livro {
 
     public Integer getAnoPublicacao() { return anoPublicacao; }
     public void setAnoPublicacao(Integer anoPublicacao) { this.anoPublicacao = anoPublicacao; }
+
+    public boolean isDisponivel() { return disponivel; }
+    public void setDisponivel(boolean disponivel) { this.disponivel = disponivel; }
 }

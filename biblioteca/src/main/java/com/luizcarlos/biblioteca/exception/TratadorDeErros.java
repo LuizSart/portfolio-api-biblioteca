@@ -30,4 +30,13 @@ public class TratadorDeErros {
 
         return erros; // Devolvemos o dicionário formatado como JSON!
     }
+
+    // Captura erros de lógica de negócio (como "livro já emprestado")
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(RuntimeException.class)
+    public Map<String, String> lidarComErrosDeNegocio(RuntimeException ex) {
+        Map<String, String> erro = new HashMap<>();
+        erro.put("mensagem", ex.getMessage());
+        return erro;
+    }
 }
